@@ -56,29 +56,39 @@ function WalletId({ walletId, ownerType, accounts }: any) {
   const handleEnrichAccount = async (accountId: string) => {
     setLoading(true);
     setTimeout(async () => {
-      const data = await enrichAccount(accountId, currentUser?.userId);
-      if (data?.accountId) {
-        const updatedAccount = {
-          ...accounts[data?.currency],
-          enriched: true,
-        };
-        setUpdatedAccounts({
-          ...updatedAccounts,
-          [data?.currency]: { ...updatedAccount },
-        });
-        console.log(updatedAccount);
-        console.log(updatedAccounts);
+      try {
+        const data = await enrichAccount(accountId, currentUser?.userId);
+        if (data?.accountId) {
+          const updatedAccount = {
+            ...accounts[data?.currency],
+            enriched: true,
+          };
+          setUpdatedAccounts({
+            ...updatedAccounts,
+            [data?.currency]: { ...updatedAccount },
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      } finally {
         setLoading(false);
       }
-    }, 500);
+    }, 1000);
   };
   const handleDepositeEuro = async (accountId: string) => {
     setLoading(true);
     setTimeout(async () => {
-      const data = await depositeEuro(accountId);
-      if (data?.status === 200) {
+      try {
+        const data = await depositeEuro(accountId);
+        console.log(data);
+        if (data == "OK") {
+          console.log("handle");
+          getUserWallets(currentUser?.userId);
+        }
+      } catch (e) {
+        console.log(e);
+      } finally {
         setLoading(false);
-        getUserWallets(currentUser?.userId);
       }
     }, 500);
   };
@@ -218,14 +228,12 @@ function WalletId({ walletId, ownerType, accounts }: any) {
                     </Box>
                   </Box>
                 </Box>
-                <Box
-                  sx={alignmentRow}
-                  onClick={(e) => getAccountStatement(account?.accountId)}
-                >
+                <Box sx={alignmentRow}>
                   <Typography
                     component="div"
                     variant="caption"
                     className="display_f_sb_center"
+                    onClick={(e) => getAccountStatement(account?.accountId)}
                     sx={{
                       "&:hover": {
                         textDecoration: "underline",

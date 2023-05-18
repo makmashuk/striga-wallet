@@ -30,9 +30,9 @@ import {
   getSourceRate,
   getValidSources,
 } from "@/services/swap.service";
-import { Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-
+import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 function SwapExchange() {
   const [formValues, setFormValues] = useState({
     selectedWallet: {} as IWallet,
@@ -246,6 +246,13 @@ function SwapExchange() {
             }}
           >
             <Box>
+              <Box sx={{ display: "flex", gap: "1em" }}>
+                <CurrencyExchangeIcon fontSize="large" color="primary" />
+                <Typography variant="h5" gutterBottom>
+                  Exchange Currency
+                </Typography>
+              </Box>
+              <Divider sx={{ margin: "2em 0" }} />
               <FormControl fullWidth>
                 <InputLabel id="wallet-label">Select Wallet</InputLabel>
                 <Select

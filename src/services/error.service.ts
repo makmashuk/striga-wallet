@@ -1,5 +1,5 @@
 export function handleErrors(response: any, enqueueSnackbar: any) {
-  console.log(response);
+  // console.log(response);
   const { data, status } = response;
 
   const message = data?.message + "-" + data?.errorDetails;

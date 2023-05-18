@@ -9,12 +9,12 @@ export default function CenterLayout({ children }: any) {
             item
             xs={12}
             sm={10}
-            md={5}
+            md={4}
             sx={{
               minHeight: "70vh",
               display: "flex",
               flexDirection: "column",
-              gap: "2em",
+              gap: "1em",
             }}
           >
             {children}

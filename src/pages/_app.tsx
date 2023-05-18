@@ -7,6 +7,7 @@ import theme from "../utils/theme";
 import { SnackbarProvider } from "notistack";
 import { UserContextProvider } from "@/context/user";
 import { WalletContextProvider } from "@/context/wallet";
+import ErrorBoundary from "@/components/elements/ErrorBoundary";
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -18,16 +19,18 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <UserContextProvider>
-          <WalletContextProvider>
-            <SnackbarProvider preventDuplicate>
-              {/* {getLayout(<Component {...pageProps} />)} */}
-              <Component {...pageProps} />
-            </SnackbarProvider>
-          </WalletContextProvider>
-        </UserContextProvider>
-      </ThemeProvider>
+      <ErrorBoundary>
+        <ThemeProvider theme={theme}>
+          <UserContextProvider>
+            <WalletContextProvider>
+              <SnackbarProvider preventDuplicate>
+                {/* {getLayout(<Component {...pageProps} />)} */}
+                <Component {...pageProps} />
+              </SnackbarProvider>
+            </WalletContextProvider>
+          </UserContextProvider>
+        </ThemeProvider>
+      </ErrorBoundary>
     </>
   );
 }

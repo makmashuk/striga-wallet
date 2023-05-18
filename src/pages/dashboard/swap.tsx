@@ -1,4 +1,4 @@
-import SwapExchange from "@/components/modules/SwapExchange/SwapExchange";
+import SwapExchange from "@/components/modules/SwapExchange";
 import React from "react";
 
 function Swap() {

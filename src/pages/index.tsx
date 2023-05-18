@@ -1,5 +1,6 @@
 import Head from "next/head";
-import Register from "@/components/modules/Register/Register";
+import Register from "@/components/modules/Register";
+import CenterLayout from "@/components/layouts/CenterLayout";
 
 export default function Home() {
   return (
@@ -17,7 +18,9 @@ export default function Home() {
         ></link>
       </Head>
 
-      <Register />
+      <CenterLayout>
+        <Register />
+      </CenterLayout>
     </>
   );
 }

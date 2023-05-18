@@ -128,20 +128,19 @@ export default function VerifyMobileEmail() {
             }}
           >
             <Button
-              variant="outlined"
-              onClick={() =>
-                handleRequestMobileVerification(verificationState.userId)
-              }
-            >
-              Request OTP
-            </Button>
-
-            <Button
               onClick={() => handleMobileVerification(verificationState.userId)}
               variant="contained"
               color="info"
             >
               Simulate Mobile verification
+            </Button>
+            <Button
+              variant="text"
+              onClick={() =>
+                handleRequestMobileVerification(verificationState.userId)
+              }
+            >
+              Request OTP
             </Button>
           </Box>
         )}
@@ -177,20 +176,19 @@ export default function VerifyMobileEmail() {
             }}
           >
             <Button
-              variant="outlined"
-              onClick={() =>
-                handleRequestEmailVerification(verificationState.userId)
-              }
-            >
-              Resend Email
-            </Button>
-
-            <Button
               onClick={() => handleEmailVerification(verificationState.userId)}
               color={"info"}
               variant="contained"
             >
               Simulate Email verification
+            </Button>
+            <Button
+              variant="text"
+              onClick={() =>
+                handleRequestEmailVerification(verificationState.userId)
+              }
+            >
+              Resend Email
             </Button>
           </Box>
         )}
@@ -215,7 +213,7 @@ export default function VerifyMobileEmail() {
             </Box>
           )}
       </Box>
-      <Divider />
+      <Divider sx={{ margin: "1em 0" }} />
     </>
   );
 }

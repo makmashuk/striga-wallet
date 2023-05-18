@@ -96,6 +96,7 @@ const getTradeRates = async () => {
     if (handleErrors(response, enqueueSnackbar)) {
       return;
     }
+    // console.log(response);
     if (response?.status === 200) {
       return response.data.data;
     }

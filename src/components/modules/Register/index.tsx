@@ -1,8 +1,7 @@
-"use client";
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
-
+import styles from "./style.module.scss";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -11,16 +10,15 @@ import { useEffect, useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { MuiTelInput } from "mui-tel-input";
 import {
+  Divider,
   FormControl,
   FormHelperText,
   InputLabel,
   MenuItem,
-  OutlinedInput,
   Select,
   useFormControl,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
-import useFetchData from "@/hooks/useFetchData.hooks";
+import { useRouter } from "next/router";
 import { IUserRegistration } from "@/types/user.type";
 import { enqueueSnackbar } from "notistack";
 import { useUserContext } from "@/context/user";
@@ -49,34 +47,36 @@ const defaultUser = {
 const Register = () => {
   const router = useRouter();
 
+  // State variables for user and loading
   const [user, setUser] = useState<IUserRegistration>(defaultUser);
-
-  const {
-    user: currentUser,
-    verificationState,
-    handleRegister,
-    handleVerificationState,
-  } = useUserContext();
   const [loading, setLoading] = useState(false);
 
-  const [phone, setPhone] = React.useState(
+  const { user: currentUser, handleRegister } = useUserContext();
+
+  // State variable for phone number
+  const [phone, setPhone] = useState(
     defaultUser.mobile.countryCode + defaultUser.mobile.number
   );
 
+  // Handle phone number change
   const handlePhoneChange = (phoneNumber: any) => {
-    const code = phoneNumber.substring(0, 4); // +372
+    const code = phoneNumber.substring(0, 4);
     const updatedMobile = {
       countryCode: code,
-      number: phoneNumber.replace(code, ""), // 1212121,
+      number: phoneNumber.replace(code, ""),
     };
     setPhone(phoneNumber);
     setUser({ ...user, mobile: updatedMobile });
   };
+
+  // Redirect if user is already registered
   useEffect(() => {
     if (currentUser?.userId) {
       router.push(`verify/${currentUser.userId}`);
     }
   }, [currentUser, router]);
+
+  // Handle register button click
   const handleRegisterClick = (event: any) => {
     event.preventDefault();
     const registerPayload = { ...user };
@@ -85,15 +85,17 @@ const Register = () => {
       try {
         const data: any = await handleRegister(registerPayload);
         if (data) {
-          console.log(data);
-        } else {
-          setLoading(false);
+          router.push(`verify/${currentUser.userId}`);
         }
       } catch (e) {
-        console.log(e);
+        enqueueSnackbar("SERVER ERR!", { variant: "error" });
+      } finally {
+        setLoading(false);
       }
     }, 1000);
   };
+
+  // Helper component for email validation message
   function EmailHelperText() {
     const { focused } = useFormControl() || {};
 
@@ -102,36 +104,14 @@ const Register = () => {
         return "Enter valid email";
       }
 
-      return "verification needed";
-    }, [focused]);
-
-    return <FormHelperText>{helperText}</FormHelperText>;
-  }
-  function PhoneHelperText() {
-    const { focused } = useFormControl() || {};
-
-    const helperText = React.useMemo(() => {
-      if (focused) {
-        return "Enter valid Mobile ";
-      }
-
-      return "verification needed";
+      return "* verification needed";
     }, [focused]);
 
     return <FormHelperText>{helperText}</FormHelperText>;
   }
 
   return (
-    <Grid
-      container
-      sx={{
-        padding: 2,
-        margin: "auto",
-        textAlign: "center",
-        maxWidth: { xs: "100%", md: "40%" },
-      }}
-      spacing={2}
-    >
+    <Grid container className={styles.card} sx={{ padding: "1em" }} spacing={1}>
       <Grid
         item
         xs={12}
@@ -175,7 +155,9 @@ const Register = () => {
       <Grid item xs={12}>
         <Box component="form" noValidate autoComplete="off">
           <FormControl sx={{ width: "100%" }}>
-            <OutlinedInput
+            <TextField
+              name="Email"
+              label="Email"
               value={user.email}
               onChange={(e) => setUser({ ...user, email: e.target.value })}
               placeholder="Please enter email"
@@ -191,17 +173,15 @@ const Register = () => {
             value={phone}
             onChange={handlePhoneChange}
           />
-          <PhoneHelperText />
         </Box>
       </Grid>
       <Grid item xs={12}>
         <Box component="form" noValidate autoComplete="off">
           <FormControl sx={{ width: "100%" }}>
-            <InputLabel htmlFor="address">Address Line </InputLabel>
-
-            <OutlinedInput
+            <TextField
+              name="Address1"
+              label="Address Line"
               value={user.address.addressLine1}
-              id="address"
               onChange={(e) =>
                 setUser({
                   ...user,
@@ -218,11 +198,9 @@ const Register = () => {
       <Grid item xs={4}>
         <Box component="form" noValidate autoComplete="off">
           <FormControl sx={{ width: "100%" }}>
-            <InputLabel htmlFor="city">City</InputLabel>
-
-            <OutlinedInput
+            <TextField
               value={user.address.city}
-              id="city"
+              label="City"
               onChange={(e) =>
                 setUser({
                   ...user,
@@ -239,11 +217,10 @@ const Register = () => {
       <Grid item xs={4}>
         <Box component="form" noValidate autoComplete="off">
           <FormControl sx={{ width: "100%" }}>
-            <InputLabel id="postal">Postal Code</InputLabel>
-
-            <OutlinedInput
+            <TextField
               value={user.address.postalCode}
               type="number"
+              label="Postal Code"
               onChange={(e) =>
                 setUser({
                   ...user,
@@ -261,10 +238,8 @@ const Register = () => {
         <FormControl fullWidth>
           <InputLabel id="country">Country</InputLabel>
           <Select
-            labelId="country-select-label"
-            id="country-select"
+            labelId="country"
             value={user.address.country}
-            label="Country"
             onChange={(e) =>
               setUser({
                 ...user,
@@ -284,6 +259,7 @@ const Register = () => {
         </FormControl>
       </Grid>
       <Grid item xs={12}>
+        <Divider sx={{ margin: "1em 0" }}></Divider>
         <LoadingButton
           size="large"
           fullWidth

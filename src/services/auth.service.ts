@@ -6,8 +6,13 @@ import { enqueueSnackbar } from "notistack";
 
 const registerUserService = async (payload: IUserRegistration) => {
   try {
-    const response = await apiClient.post(AUTH_ROUTE.CREATE_USER, payload);
-    return response.data;
+    const { status, data } = await apiClient.post(
+      AUTH_ROUTE.CREATE_USER,
+      payload
+    );
+
+    console.log(status);
+    return data;
   } catch (e) {
     console.log(e);
   }
@@ -62,6 +67,7 @@ const verifyEmailService = async (payload: any) => {
     if (handleErrors(response, enqueueSnackbar)) {
       return;
     }
+    console.log(response);
     return response.data;
   } catch (e) {
     console.log(e);
@@ -79,7 +85,6 @@ const getUser = async (id: any) => {
 };
 const getKYCstatusWithUser = async (id: any) => {
   if (id === null || id === undefined) return null;
-  console.log(id);
   try {
     const [userResponse, kycResponse] = await Promise.allSettled([
       apiClient.get(`user/${id}`),

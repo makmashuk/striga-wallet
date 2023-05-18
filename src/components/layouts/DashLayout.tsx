@@ -21,6 +21,14 @@ import IconButton from "@mui/material/IconButton";
 import { useRouter } from "next/router";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Button } from "@mui/material";
+import { KYC_STATUS } from "@/constans/kycstatus.constant";
+import MobileFriendlyIcon from "@mui/icons-material/MobileFriendly";
+import MobileOffIcon from "@mui/icons-material/MobileOff";
+import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
+import UnsubscribeIcon from "@mui/icons-material/Unsubscribe";
+import PersonOffIcon from "@mui/icons-material/PersonOff";
+import VerifiedIcon from "@mui/icons-material/Verified";
+import GppMaybeIcon from "@mui/icons-material/GppMaybe";
 const drawerWidth = 240;
 interface Props {
   children: React.ReactNode;
@@ -28,7 +36,11 @@ interface Props {
 }
 
 export default function DashLayout({ window, children }: Props) {
-  const { user: currentUser, handleLogout } = useUserContext();
+  const {
+    user: currentUser,
+    handleLogout,
+    verificationState,
+  } = useUserContext();
   const [mobileOpen, setMobileOpen] = useState(false);
   const router = useRouter();
 
@@ -43,7 +55,7 @@ export default function DashLayout({ window, children }: Props) {
   ];
   const drawer = (
     <div>
-      <Toolbar>
+      <Toolbar variant="regular">
         <Logo />
       </Toolbar>
       <Divider />
@@ -53,6 +65,7 @@ export default function DashLayout({ window, children }: Props) {
             <ListItemButton
               selected={router?.pathname === item.route}
               onClick={() => router.push(item.route)}
+              disabled={verificationState?.status != KYC_STATUS.APPROVED}
             >
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
@@ -61,6 +74,14 @@ export default function DashLayout({ window, children }: Props) {
             </ListItemButton>
           </ListItem>
         ))}
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => handleLogout()}>
+            <ListItemIcon>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Logout"} />
+          </ListItemButton>
+        </ListItem>
       </List>
     </div>
   );
@@ -81,7 +102,15 @@ export default function DashLayout({ window, children }: Props) {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar sx={{ justifyContent: "space-between" }}>
+        <Toolbar
+          variant="regular"
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: { xs: "0", md: "1em" },
+          }}
+        >
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -91,17 +120,36 @@ export default function DashLayout({ window, children }: Props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h5" noWrap component="div">
-            Wc {currentUser?.firstName}, {currentUser?.lastName}
-          </Typography>
-          <Button
-            variant="outlined"
-            onClick={handleLogout}
-            color="warning"
-            startIcon={<LogoutIcon />}
-          >
-            Logout
-          </Button>
+          <Box>
+            <Typography variant="h5" noWrap component="div">
+              Wc {currentUser?.firstName}, {currentUser?.lastName}
+            </Typography>
+            <Typography variant="caption" noWrap component="div">
+              Wallet Dashboard
+            </Typography>
+          </Box>
+          <Box sx={{ display: "flex", gap: "1em" }}>
+            {verificationState?.mobileVerified ? (
+              <MobileFriendlyIcon fontSize="large" color="success" />
+            ) : (
+              <MobileOffIcon fontSize="large" color="warning" />
+            )}
+            {verificationState?.emailVerified ? (
+              <MarkEmailReadIcon fontSize="large" color="success" />
+            ) : (
+              <UnsubscribeIcon fontSize="large" color="warning" />
+            )}
+            {verificationState?.missingFields ? (
+              <PersonOffIcon fontSize="large" color="warning" />
+            ) : (
+              ""
+            )}
+            {verificationState?.status === KYC_STATUS.APPROVED ? (
+              <VerifiedIcon fontSize="large" color="success" />
+            ) : (
+              <GppMaybeIcon fontSize="large" color="warning" />
+            )}
+          </Box>
         </Toolbar>
       </AppBar>
       <Box
@@ -150,7 +198,7 @@ export default function DashLayout({ window, children }: Props) {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        <Toolbar sx={{ zIndex: "2" }} />
+        <Toolbar variant="regular" />
         {children}
       </Box>
     </Box>

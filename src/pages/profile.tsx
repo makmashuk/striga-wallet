@@ -1,5 +1,5 @@
 import DashLayout from "@/components/layouts/DashLayout";
-import KYCVerify from "@/components/modules/KYCVerify/KYCVerify";
+import KYCVerify from "@/components/modules/KYCVerify";
 import UserProfile from "@/components/modules/UserProfile/UserProfile";
 import VerifyMobileEmail from "@/components/modules/VerifyMobileEmail/VerifyMobileEmail";
 import VerifyTemplateStepper from "@/components/templates/VerifyTemplate";
@@ -22,8 +22,6 @@ function profile() {
             gap: "2em",
           }}
         >
-          <VerifyMobileEmail />
-          <KYCVerify />
           <UserProfile />
         </Grid>
       </Grid>

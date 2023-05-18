@@ -5,67 +5,66 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { Alert, Box, Button, Chip, LinearProgress } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { Router } from "next/router";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 function KYCVerify() {
+  // Get user context and verification state
   const {
     user: currentUser,
     verificationState,
-
     handleVerificationState,
   } = useUserContext();
+
   const router = useRouter();
+
+  // State variables for loading and simulation
   const [simulatedKYC, setSimulatedKYC] = useState(false);
   const [loadingStartKYC, setLoadingStartKYC] = useState(false);
   const [loadingSimulateKYC, setLoadingSimulateKYC] = useState(false);
   const [loadingCheckingKYC, setLoadingCheckingKYC] = useState(false);
 
-  const handleKYCVerification = async () => {
+  // Handle KYC verification
+  const handleKYCVerification = useCallback(async () => {
     setLoadingStartKYC(true);
-    setTimeout(async () => {
-      try {
-        const data = await startKYCWithUser(currentUser?.userId);
-        if (data?.token) {
-          handleVerificationState(data?.userId);
-          setLoadingStartKYC(false);
-        } else {
-          setLoadingStartKYC(false);
-        }
-      } catch (e) {
-        console.log(e);
-        setLoadingStartKYC(false);
+    try {
+      const data = await startKYCWithUser(currentUser?.userId);
+      if (data?.token) {
+        handleVerificationState(data?.userId);
       }
-    }, 1000);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoadingStartKYC(false);
+    }
+  }, [currentUser?.userId, handleVerificationState]);
 
-    // console.log(data);
-  };
-  const handleSimulateKYCVerification = async () => {
+  // Handle simulated KYC verification
+  const handleSimulateKYCVerification = useCallback(async () => {
     setLoadingSimulateKYC(true);
-    setTimeout(async () => {
-      try {
-        const data = await simulateKYCWithUser(currentUser?.userId);
-        if (data === "OK") {
-          handleVerificationState(data?.userId);
-          setSimulatedKYC(true);
-          setLoadingSimulateKYC(false);
-        }
-      } catch (e) {
-        console.log(e);
-        setLoadingStartKYC(false);
+    try {
+      const data = await simulateKYCWithUser(currentUser?.userId);
+      if (data === "OK") {
+        handleVerificationState(data?.userId);
+        setSimulatedKYC(true);
       }
-    }, 1000);
-  };
-  const handleKYCUpdateCheck = async () => {
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoadingSimulateKYC(false);
+    }
+  }, [currentUser?.userId, handleVerificationState]);
+
+  // Handle KYC status update check
+  const handleKYCUpdateCheck = useCallback(async () => {
     setLoadingCheckingKYC(true);
-    setTimeout(async () => {
-      try {
-        handleVerificationState(currentUser?.userId);
-      } catch (e) {
-        console.log(e);
-        setLoadingStartKYC(false);
-      }
-    }, 1000);
-  };
+    try {
+      handleVerificationState(currentUser?.userId);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoadingCheckingKYC(false);
+    }
+  }, [currentUser?.userId, handleVerificationState]);
 
   return (
     <>
@@ -102,7 +101,7 @@ function KYCVerify() {
         {verificationState.status === KYC_STATUS.INITIATED && (
           <>
             <Alert sx={{ width: "100%" }} variant="outlined" severity="info">
-              <strong>KYC Inititated . Please Confirm the Verification</strong>
+              <strong>KYC Inititated . Please Simulate the Verification</strong>
             </Alert>
             <Box sx={{ width: "100%" }}>
               <LinearProgress />
@@ -144,7 +143,7 @@ function KYCVerify() {
         {verificationState.status === KYC_STATUS.APPROVED && (
           <>
             <Alert variant="outlined" severity="success">
-              <strong>KYC Verified!</strong>
+              <strong>KYC Verified! All Done </strong>
             </Alert>
             <Button
               fullWidth

@@ -21,6 +21,7 @@ import {
   CircularProgress,
   Badge,
   LinearProgress,
+  Divider,
 } from "@mui/material";
 import { IWallet } from "@/types/wallet.type";
 import { enqueueSnackbar } from "notistack";
@@ -76,7 +77,7 @@ function Wallet() {
                 style={{ fontSize: "3.5rem" }}
                 color="primary"
               />
-              Add New
+              Add Wallet
             </>
           )}
         </Card>
@@ -106,6 +107,7 @@ function Wallet() {
                 </Box>
                 <Chip label={wallet.ownerType} size="small" />
               </Box>
+              <Divider sx={{ margin: "0.5em 0" }} />
               <Typography
                 component="div"
                 variant="caption"
