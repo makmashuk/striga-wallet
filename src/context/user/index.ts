@@ -1,4 +1,4 @@
 import useUserContext from "./useUserContext";
 import UserContextProvider from "./user.context";
-
-export { useUserContext, UserContextProvider };
+import { UserContext } from "./user.context";
+export { useUserContext, UserContextProvider, UserContext };

@@ -111,7 +111,7 @@ const Register = () => {
   }
 
   return (
-    <Grid container className={styles.card} sx={{ padding: "1em" }} spacing={1}>
+    <Grid container className={styles.card} sx={{ padding: "2em" }} spacing={1}>
       <Grid
         item
         xs={12}

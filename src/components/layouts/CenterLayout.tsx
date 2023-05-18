@@ -9,7 +9,7 @@ export default function CenterLayout({ children }: any) {
             item
             xs={12}
             sm={10}
-            md={4}
+            md={5}
             sx={{
               minHeight: "70vh",
               display: "flex",

@@ -1,8 +1,5 @@
 import DashLayout from "@/components/layouts/DashLayout";
-import KYCVerify from "@/components/modules/KYCVerify";
-import UserProfile from "@/components/modules/UserProfile/UserProfile";
-import VerifyMobileEmail from "@/components/modules/VerifyMobileEmail/VerifyMobileEmail";
-import VerifyTemplateStepper from "@/components/templates/VerifyTemplate";
+import UserProfile from "@/components/modules/UserProfile";
 import { Grid } from "@mui/material";
 import React from "react";
 

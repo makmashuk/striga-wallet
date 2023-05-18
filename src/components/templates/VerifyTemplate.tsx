@@ -10,7 +10,7 @@ import {
   Paper,
 } from "@mui/material";
 import KYCVerify from "../modules/KYCVerify";
-import UserProfile from "../modules/UserProfile/UserProfile";
+import UserProfile from "../modules/UserProfile";
 import VerifyMobileEmail from "../modules/VerifyMobileEmail/VerifyMobileEmail";
 import { useState } from "react";
 

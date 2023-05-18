@@ -2,9 +2,8 @@ import { KYC_STATUS } from "@/constans/kycstatus.constant";
 import { useUserContext } from "@/context/user";
 import { simulateKYCWithUser, startKYCWithUser } from "@/services/auth.service";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { Alert, Box, Button, Chip, LinearProgress } from "@mui/material";
-import { useRouter } from "next/navigation";
-import { Router } from "next/router";
+import { Alert, Box, Button, LinearProgress } from "@mui/material";
+import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
 
 function KYCVerify() {
