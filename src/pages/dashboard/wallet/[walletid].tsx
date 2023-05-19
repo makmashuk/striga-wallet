@@ -95,7 +95,7 @@ function WalletId({ walletId, ownerType, accounts }: any) {
           // console.log(updatedAccount);
           setUpdatedAccounts({
             ...updatedAccounts,
-            EUR: { ...updatedAccount },
+            ["EUR"]: { ...updatedAccount },
           });
         }
       } catch (e) {
