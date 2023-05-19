@@ -157,7 +157,7 @@ const depositeEuro = async (accountId: any) => {
     }
     if (response?.status === 200) {
       enqueueSnackbar(`EUR Deposited Succesfully`, { variant: "success" });
-      return response.data.data;
+      return response.data;
     }
   } catch (e: any) {
     console.log(e);

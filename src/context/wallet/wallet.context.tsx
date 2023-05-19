@@ -50,6 +50,7 @@ export default function WalletContextProvider({
 
   //getting the user wallets by userId, sorting with the createdAt value, updating context state
   const getUserWallets = async (userId: any) => {
+    console.log("getUserWallets");
     const data = await getWalletsByUserId(userId);
     const wallets = data?.wallets;
 

@@ -45,6 +45,7 @@ const alignmentRow = {
 
 function WalletId({ walletId, ownerType, accounts }: any) {
   const { user: currentUser } = useUserContext();
+  const router = useRouter();
   const { getUserWallets } = useWalletContext();
   const [loading, setLoading] = useState(false);
   const [updatedAccounts, setUpdatedAccounts] =
@@ -63,6 +64,7 @@ function WalletId({ walletId, ownerType, accounts }: any) {
             ...accounts[data?.currency],
             enriched: true,
           };
+
           setUpdatedAccounts({
             ...updatedAccounts,
             [data?.currency]: { ...updatedAccount },
@@ -80,10 +82,21 @@ function WalletId({ walletId, ownerType, accounts }: any) {
     setTimeout(async () => {
       try {
         const data = await depositeEuro(accountId);
-        console.log(data);
-        if (data == "OK") {
-          console.log("handle");
-          getUserWallets(currentUser?.userId);
+        console.log(accounts);
+        if (data.status == 200) {
+          const updatedAccount: IValidAccount = {
+            ...accounts["EUR"],
+            availableBalance: {
+              ...accounts["EUR"]?.availableBalance,
+              amount:
+                parseInt(accounts["EUR"]?.availableBalance?.amount) + 100000,
+            },
+          };
+          // console.log(updatedAccount);
+          setUpdatedAccounts({
+            ...updatedAccounts,
+            EUR: { ...updatedAccount },
+          });
         }
       } catch (e) {
         console.log(e);
